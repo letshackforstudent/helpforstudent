@@ -113,11 +113,134 @@ plt.show()'>6</button>
 
     <button class="copy-button" data-value='import numpy as np&#10;import pandas as pd&#10;import matplotlib.pyplot as plt&#10;import seaborn as sns&#10;import warnings&#10;from sklearn.datasets import fetch_openml&#10;from sklearn.linear_model import LinearRegression&#10;from sklearn.preprocessing import PolynomialFeatures&#10;from sklearn.metrics import mean_squared_error, r2_score&#10;from sklearn.model_selection import train_test_split&#10;warnings.filterwarnings("ignore")&#10;boston = fetch_openml(name="boston", version=1, as_frame=True)&#10;X_boston = boston.data&#10;y_boston = boston.target&#10;X_train_b, X_test_b, y_train_b, y_test_b = train_test_split(X_boston, y_boston, test_size=0.2, random_state=42)&#10;linear_model = LinearRegression()&#10;linear_model.fit(X_train_b, y_train_b)&#10;y_pred_b = linear_model.predict(X_test_b)&#10;print("----- Linear Regression: Boston Housing -----")&#10;print(f"MSE:{mean_squared_error(y_test_b, y_pred_b):.2f}")&#10;print(f"RMSE: {np.sqrt(mean_squared_error(y_test_b, y_pred_b)):.2f}")&#10;print(f"R² Score: {r2_score(y_test_b, y_pred_b):.2f}")&#10;print()&#10;df = sns.load_dataset(&apos;mpg&apos;)&#10;df = df.dropna()&#10;df[&apos;horsepower&apos;] = df[&apos;horsepower&apos;].fillna(df[&apos;horsepower&apos;].median())&#10;X_mpg = df[[&apos;horsepower&apos;]]&#10;y_mpg = df[&apos;mpg&apos;]&#10;X_train_m, X_test_m, y_train_m, y_test_m = train_test_split(X_mpg, y_mpg, test_size=0.2, random_state=42)&#10;poly = PolynomialFeatures(degree=2)&#10;X_train_poly = poly.fit_transform(X_train_m)&#10;X_test_poly = poly.transform(X_test_m)&#10;poly_model = LinearRegression()&#10;poly_model.fit(X_train_poly, y_train_m)&#10;y_pred_poly = poly_model.predict(X_test_poly)&#10;print("----- Polynomial Regression: Auto MPG (Degree 2) -----")&#10;print(f"MSE:{mean_squared_error(y_test_m, y_pred_poly):.2f}")&#10;print(f"RMSE: {np.sqrt(mean_squared_error(y_test_m, y_pred_poly)):.2f}")&#10;print(f"R² Score: {r2_score(y_test_m, y_pred_poly):.2f}")&#10;print()&#10;X_range = np.linspace(X_mpg.min(), X_mpg.max(), 100).reshape(-1, 1)&#10;X_range_poly = poly.transform(X_range)&#10;y_range_pred = poly_model.predict(X_range_poly)&#10;plt.scatter(X_mpg, y_mpg, color=&apos;green&apos;, label=&apos;Actual Data&apos;)&#10;plt.plot(X_range, y_range_pred, color=&apos;red&apos;, label=&apos;Polynomial Fit (Degree 2)&apos;, linewidth=2)&#10;plt.xlabel("Horsepower")&#10;plt.ylabel("MPG")&#10;plt.title("Polynomial Regression: Horsepower vs MPG")&#10;plt.legend()&#10;plt.grid(True)&#10;plt.show()'>7</button>
 
-    <!-- <button class="copy-button" data-value='import cv2&#10;import numpy as np&#10;image = cv2.imread("C:/Users/cse/Desktop/CG LAB/single.jpg")&#10;angle = 45&#10;scale_x = 1.5&#10;scale_y = 1.5&#10;tx = 50&#10;ty = 50&#10;height, width = image.shape[:2]&#10;rotation_matrix = cv2.getRotationMatrix2D((width/2, height/2), angle, 1)&#10;rotated_image = cv2.warpAffine(image, rotation_matrix, (width, height))&#10;scaled_image = cv2.resize(image, None, fx=scale_x, fy=scale_y)&#10;translation_matrix = np.float32([[1, 0, tx], [0, 1, ty]])&#10;translated_image = cv2.warpAffine(image, translation_matrix, (width, height))&#10;cv2.imshow("Original Image", image)&#10;cv2.imshow("Rotated Image", rotated_image)&#10;cv2.imshow("Scaled Image", scaled_image)&#10;cv2.imshow("Translated Image", translated_image)&#10;cv2.waitKey(0)&#10;cv2.destroyAllWindows()'>8</button>
+    <button class="copy-button" data-value='import matplotlib.pyplot as plt
+import numpy as np
+from sklearn.datasets import load_breast_cancer
+from sklearn.tree import DecisionTreeClassifier, plot_tree
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score
 
-    <button class="copy-button" data-value='import cv2&#10;import numpy as np&#10;image = cv2.imread("C:/Users/cse/Desktop/CG LAB/single.jpg", cv2.IMREAD_GRAYSCALE)&#10;edges = cv2.Canny(image, 100, 200)&#10;image_blur = cv2.GaussianBlur(image, (3, 3), 0)&#10;image_log = cv2.Laplacian(image_blur, cv2.CV_64F)&#10;image_log = np.uint8(np.absolute(image_log))&#10;cv2.imshow("Original Image", image)&#10;cv2.imshow("Edges", edges)&#10;cv2.imshow("Texture (LoG)", image_log)&#10;cv2.waitKey(0)&#10;cv2.destroyAllWindows()'>9</button>
+# Step 1: Load the breast cancer dataset
+data = load_breast_cancer()
+X = data.data
+y = data.target
 
-    <button class="copy-button" data-value='import cv2&#10;image = cv2.imread("C:/Users/cse/Desktop/CG LAB/single.jpg")&#10;gaussian_blur = cv2.GaussianBlur(image, (15, 15), 0)&#10;median_blur = cv2.medianBlur(image, 15)&#10;bilateral_blur = cv2.bilateralFilter(image, 15, 75, 75)&#10;cv2.imshow("Original Image", image)&#10;cv2.imshow("Gaussian Blur", gaussian_blur)&#10;cv2.imshow("Median Blur", median_blur)&#10;cv2.imshow("Bilateral Blur", bilateral_blur)&#10;cv2.waitKey(0)&#10;cv2.destroyAllWindows()'>10</button>
+# Step 2: Split into training and test sets
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2,
+ random_state=42)
+
+# Step 3: Train the Decision Tree classifier
+clf = DecisionTreeClassifier(criterion=’gini’,random_state=42)
+clf.fit(X_train, y_train)
+
+# Step 4: Evaluate the classifier
+y_pred = clf.predict(X_test)
+accuracy = accuracy_score(y_test, y_pred)
+print(f"Accuracy on test data: {accuracy*100:.2f}%")
+
+# Step 5: Classify a new sample (Example: taking the first test sample)
+new_sample = X_test[0].reshape(1, -1) # Reshapes it into the 2D shape expected by the model.
+predicted_class = clf.predict(new_sample)[0]# Since predict returns an array (even for one sample), [0] extracts the single prediction
+
+print("Predicted class for the new sample:", 
+data.target_names[predicted_class])
+print("Actual class:", data.target_names[y_test[0]])
+
+# Step 6: Visualize the Decision Tree
+plt.figure(figsize=(20, 10))
+plot_tree(clf, filled=True, feature_names=data.feature_names, 
+class_names=data.target_names)
+plt.title("Decision Tree for Breast Cancer Classification")
+plt.show()
+
+'>8</button>
+
+    <button class="copy-button" data-value='from sklearn.datasets import fetch_olivetti_faces
+    from sklearn.model_selection import train_test_split
+    from sklearn.decomposition import PCA
+    from sklearn.naive_bayes import GaussianNB
+    from sklearn.metrics import accuracy_score, classification_report
+    import matplotlib.pyplot as plt
+    
+    # Step 1: Load the dataset
+    faces = fetch_olivetti_faces()
+    X = faces.data  # Each image is flattened (64x64 -> 4096 features)
+    y = faces.target  # Labels from 0 to 39 (40 people)
+    
+    # Step 2: Split into train and test sets
+    X_train, X_test, y_train, y_test = train_test_split( X, y,
+     test_size=0.25,random_state=42, stratify=y) # Makes sure the proportion of classes (benign/malignant) in training and testing stays the same as in the original data. (Important if classes are imbalanced!)
+    
+    # Step 3: Dimensionality Reduction using PCA
+    pca = PCA(n_components=100, whiten=True, random_state=42) #whiten=true, removes the correlation between components so that it becomes independent components
+    X_train_pca = pca.fit_transform(X_train)
+    X_test_pca = pca.transform(X_test)
+    
+    # Step 4: Train the Naive Bayes Classifier
+    gnb = GaussianNB()
+    gnb.fit(X_train_pca, y_train)
+    
+    # Step 5: Predict and Evaluate
+    y_pred = gnb.predict(X_test_pca)
+    accuracy = accuracy_score(y_test, y_pred)
+    
+    print("Accuracy of Naive Bayes on Olivetti Faces: {:.2f}%".format(accuracy * 100))
+    print("\nClassification Report:\n", classification_report(y_test, y_pred))
+    '>9</button>
+
+    <button class="copy-button" data-value=' import numpy as np
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+    from sklearn.datasets import load_breast_cancer
+    from sklearn.preprocessing import StandardScaler
+    from sklearn.cluster import KMeans
+    from sklearn.decomposition import PCA
+    from sklearn.metrics import accuracy_score, confusion_matrix, classification_report
+    
+    #  Step 2: Load the Breast Cancer dataset
+    data = load_breast_cancer()
+    
+    # Step 3: Feature Scaling (Normalization)
+    # Standardize features to have mean = 0 and variance = 1
+    X = StandardScaler().fit_transform(data.data)
+    
+    # Step 4: Extract the target labels (malignant = 0, benign = 1)
+    y = data.target
+    
+    # Step 5: Apply K-Means Clustering
+    # Create KMeans model with 2 clusters and fit it to the scaled datakmeans = KMeans(n_clusters=2, random_state=42)
+    labels = kmeans.fit_predict(X)
+    
+    # Step 6: Evaluate the clustering performance
+    print(f"Accuracy of K-Means clustering: {accuracy_score(y, labels) * 100:.2f}%")
+    print("\nConfusion Matrix:\n", confusion_matrix(y, labels))
+    print("\nClassification Report:\n", classification_report(y, labels))
+    
+    #Step 7: Dimensionality Reduction using PCA- Reduce to 2D using PCA
+    pca = PCA(n_components=2)
+    X_pca = pca.fit_transform(X)
+    
+    # Step 8: Project cluster centroids into PCA space
+    centroids_pca = pca.transform(kmeans.cluster_centers_)
+    
+    # Step 9: Visualize the True Labels and K-Means Clustering
+    fig, axes = plt.subplots(1, 2, figsize=(12, 6))
+    titles = ['True Labels', 'K-Means Clustering']
+    
+    # Plot each scatter plot (True labels and Clustering labels)
+    for ax, data_labels, title in zip(axes, [y, labels], titles):
+        ax.scatter(X_pca[:, 0], X_pca[:, 1], c=data_labels, cmap='coolwarm', alpha=0.7)
+        ax.set(title=title, xlabel='PCA Component 1', ylabel='PCA Component 2')
+        ax.grid(True)
+    
+    # Plot the cluster centroids on the K-Means clustering plot
+    axes[1].scatter(*centroids_pca.T, marker='X', s=200, c='black', label='Centroids')
+    axes[1].legend()
+    
+    # Step 10: Final plot adjustments and display
+    plt.tight_layout()
+    plt.show()
+    >10</button>
     
     <button class="copy-button" data-value='import cv2&#10;image = cv2.imread("C:/Users/cse/Desktop/CG LAB/single.jpg")&#10;gray_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)&#10;_, thresh = cv2.threshold(gray_image, 0, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)&#10;contours, _ = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)&#10;contour_image = image.copy()&#10;cv2.drawContours(contour_image, contours, -1, (0, 255, 0), 2)&#10;cv2.imshow("Image with Contours", contour_image)&#10;cv2.waitKey(0)&#10;cv2.destroyAllWindows()'>11</button>
 
