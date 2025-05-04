@@ -120,133 +120,98 @@ from sklearn.tree import DecisionTreeClassifier, plot_tree
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score
 
-# Step 1: Load the breast cancer dataset
 data = load_breast_cancer()
 X = data.data
 y = data.target
 
-# Step 2: Split into training and test sets
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2,
- random_state=42)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
-# Step 3: Train the Decision Tree classifier
-clf = DecisionTreeClassifier(criterion=’gini’,random_state=42)
+clf = DecisionTreeClassifier(criterion="gini", random_state=42)
 clf.fit(X_train, y_train)
 
-# Step 4: Evaluate the classifier
 y_pred = clf.predict(X_test)
 accuracy = accuracy_score(y_test, y_pred)
 print(f"Accuracy on test data: {accuracy*100:.2f}%")
 
-# Step 5: Classify a new sample (Example: taking the first test sample)
-new_sample = X_test[0].reshape(1, -1) # Reshapes it into the 2D shape expected by the model.
-predicted_class = clf.predict(new_sample)[0]# Since predict returns an array (even for one sample), [0] extracts the single prediction
+new_sample = X_test[0].reshape(1, -1)
+predicted_class = clf.predict(new_sample)[0]
 
-print("Predicted class for the new sample:", 
-data.target_names[predicted_class])
+print("Predicted class for the new sample:", data.target_names[predicted_class])
 print("Actual class:", data.target_names[y_test[0]])
 
-# Step 6: Visualize the Decision Tree
 plt.figure(figsize=(20, 10))
-plot_tree(clf, filled=True, feature_names=data.feature_names, 
-class_names=data.target_names)
+plot_tree(clf, filled=True, feature_names=data.feature_names, class_names=data.target_names)
 plt.title("Decision Tree for Breast Cancer Classification")
-plt.show()
-
-'>8</button>
+plt.show()'>8</button>
 
     <button class="copy-button" data-value='from sklearn.datasets import fetch_olivetti_faces
-    from sklearn.model_selection import train_test_split
-    from sklearn.decomposition import PCA
-    from sklearn.naive_bayes import GaussianNB
-    from sklearn.metrics import accuracy_score, classification_report
-    import matplotlib.pyplot as plt
-    
-    # Step 1: Load the dataset
-    faces = fetch_olivetti_faces()
-    X = faces.data  # Each image is flattened (64x64 -> 4096 features)
-    y = faces.target  # Labels from 0 to 39 (40 people)
-    
-    # Step 2: Split into train and test sets
-    X_train, X_test, y_train, y_test = train_test_split( X, y,
-     test_size=0.25,random_state=42, stratify=y) # Makes sure the proportion of classes (benign/malignant) in training and testing stays the same as in the original data. (Important if classes are imbalanced!)
-    
-    # Step 3: Dimensionality Reduction using PCA
-    pca = PCA(n_components=100, whiten=True, random_state=42) #whiten=true, removes the correlation between components so that it becomes independent components
-    X_train_pca = pca.fit_transform(X_train)
-    X_test_pca = pca.transform(X_test)
-    
-    # Step 4: Train the Naive Bayes Classifier
-    gnb = GaussianNB()
-    gnb.fit(X_train_pca, y_train)
-    
-    # Step 5: Predict and Evaluate
-    y_pred = gnb.predict(X_test_pca)
-    accuracy = accuracy_score(y_test, y_pred)
-    
-    print("Accuracy of Naive Bayes on Olivetti Faces: {:.2f}%".format(accuracy * 100))
-    print("\nClassification Report:\n", classification_report(y_test, y_pred))
-    '>9</button>
+from sklearn.model_selection import train_test_split
+from sklearn.decomposition import PCA
+from sklearn.naive_bayes import GaussianNB
+from sklearn.metrics import accuracy_score, classification_report
+import matplotlib.pyplot as plt
 
-    <button class="copy-button" data-value=' import numpy as np
-    import matplotlib.pyplot as plt
-    import seaborn as sns
-    from sklearn.datasets import load_breast_cancer
-    from sklearn.preprocessing import StandardScaler
-    from sklearn.cluster import KMeans
-    from sklearn.decomposition import PCA
-    from sklearn.metrics import accuracy_score, confusion_matrix, classification_report
-    
-    #  Step 2: Load the Breast Cancer dataset
-    data = load_breast_cancer()
-    
-    # Step 3: Feature Scaling (Normalization)
-    # Standardize features to have mean = 0 and variance = 1
-    X = StandardScaler().fit_transform(data.data)
-    
-    # Step 4: Extract the target labels (malignant = 0, benign = 1)
-    y = data.target
-    
-    # Step 5: Apply K-Means Clustering
-    # Create KMeans model with 2 clusters and fit it to the scaled datakmeans = KMeans(n_clusters=2, random_state=42)
-    labels = kmeans.fit_predict(X)
-    
-    # Step 6: Evaluate the clustering performance
-    print(f"Accuracy of K-Means clustering: {accuracy_score(y, labels) * 100:.2f}%")
-    print("\nConfusion Matrix:\n", confusion_matrix(y, labels))
-    print("\nClassification Report:\n", classification_report(y, labels))
-    
-    #Step 7: Dimensionality Reduction using PCA- Reduce to 2D using PCA
-    pca = PCA(n_components=2)
-    X_pca = pca.fit_transform(X)
-    
-    # Step 8: Project cluster centroids into PCA space
-    centroids_pca = pca.transform(kmeans.cluster_centers_)
-    
-    # Step 9: Visualize the True Labels and K-Means Clustering
-    fig, axes = plt.subplots(1, 2, figsize=(12, 6))
-    titles = ['True Labels', 'K-Means Clustering']
-    
-    # Plot each scatter plot (True labels and Clustering labels)
-    for ax, data_labels, title in zip(axes, [y, labels], titles):
-        ax.scatter(X_pca[:, 0], X_pca[:, 1], c=data_labels, cmap='coolwarm', alpha=0.7)
-        ax.set(title=title, xlabel='PCA Component 1', ylabel='PCA Component 2')
-        ax.grid(True)
-    
-    # Plot the cluster centroids on the K-Means clustering plot
-    axes[1].scatter(*centroids_pca.T, marker='X', s=200, c='black', label='Centroids')
-    axes[1].legend()
-    
-    # Step 10: Final plot adjustments and display
-    plt.tight_layout()
-    plt.show()
-    >10</button>
-    
-    <button class="copy-button" data-value='import cv2&#10;image = cv2.imread("C:/Users/cse/Desktop/CG LAB/single.jpg")&#10;gray_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)&#10;_, thresh = cv2.threshold(gray_image, 0, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)&#10;contours, _ = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)&#10;contour_image = image.copy()&#10;cv2.drawContours(contour_image, contours, -1, (0, 255, 0), 2)&#10;cv2.imshow("Image with Contours", contour_image)&#10;cv2.waitKey(0)&#10;cv2.destroyAllWindows()'>11</button>
+faces = fetch_olivetti_faces()
+X = faces.data
+y = faces.target
 
-    <button class="copy-button" data-value='import cv2&#10;face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + "haarcascade_frontalface_default.xml")&#10;image = cv2.imread("C:/Users/cse/Desktop/CG LAB/group.jpg")&#10;gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)&#10;faces = face_cascade.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=6, minSize=(30, 30))&#10;for (x, y, w, h) in faces:&#10;    cv2.rectangle(image, (x, y), (x+w, y+h), (0, 255, 0), 2)&#10;cv2.imshow("Faces Detected", image)&#10;cv2.waitKey(0)&#10;cv2.destroyAllWindows()'>12</button> -->
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.25, random_state=42, stratify=y)
 
+pca = PCA(n_components=100, whiten=True, random_state=42)
+X_train_pca = pca.fit_transform(X_train)
+X_test_pca = pca.transform(X_test)
 
+gnb = GaussianNB()
+gnb.fit(X_train_pca, y_train)
+
+y_pred = gnb.predict(X_test_pca)
+accuracy = accuracy_score(y_test, y_pred)
+
+print("Accuracy of Naive Bayes on Olivetti Faces: {:.2f}%".format(accuracy * 100))
+print("\nClassification Report:\n", classification_report(y_test, y_pred))'>9</button>
+
+    <button class="copy-button" data-value='import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+from sklearn.datasets import load_breast_cancer
+from sklearn.preprocessing import StandardScaler
+from sklearn.cluster import KMeans
+from sklearn.decomposition import PCA
+from sklearn.metrics import accuracy_score, confusion_matrix, classification_report
+
+data = load_breast_cancer()
+X = StandardScaler().fit_transform(data.data)
+y = data.target
+
+kmeans = KMeans(n_clusters=2, random_state=42)
+labels = kmeans.fit_predict(X)
+
+print(f"Accuracy of K-Means clustering: {accuracy_score(y, labels) * 100:.2f}%")
+print("\nConfusion Matrix:\n", confusion_matrix(y, labels))
+print("\nClassification Report:\n", classification_report(y, labels))
+
+pca = PCA(n_components=2)
+X_pca = pca.fit_transform(X)
+centroids_pca = pca.transform(kmeans.cluster_centers_)
+
+fig, axes = plt.subplots(1, 2, figsize=(12, 6))
+titles = ["True Labels", "K-Means Clustering"]
+
+for ax, data_labels, title in zip(axes, [y, labels], titles):
+    ax.scatter(X_pca[:, 0], X_pca[:, 1], c=data_labels, cmap="coolwarm", alpha=0.7)
+    ax.set(title=title, xlabel="PCA Component 1", ylabel="PCA Component 2")
+    ax.grid(True)
+
+axes[1].scatter(*centroids_pca.T, marker="X", s=200, c="black", label="Centroids")
+axes[1].legend()
+
+plt.tight_layout()
+plt.show()'>10</button>
+
+  <!--  <button class="copy-button" data-value='import cv2&#10;image = cv2.imread("C:/Users/cse/Desktop/CG LAB/single.jpg")&#10;gray_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)&#10;_, thresh = cv2.threshold(gray_image, 0, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)&#10;contours, _ = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)&#10;contour_image = image.copy()&#10;cv2.drawContours(contour_image, contours, -1, (0, 255, 0), 2)&#10;cv2.imshow("Image with Contours", contour_image)&#10;cv2.waitKey(0)&#10;cv2.destroyAllWindows()'>11</button>
+
+    <button class="copy-button" data-value='import cv2&#10;face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + "haarcascade_frontalface_default.xml")&#10;image = cv2.imread("C:/Users/cse/Desktop/CG LAB/group.jpg")&#10;gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)&#10;faces = face_cascade.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=6, minSize=(30, 30))&#10;for (x, y, w, h) in faces:&#10;    cv2.rectangle(image, (x, y), (x+w, y+h), (0, 255, 0), 2)&#10;cv2.imshow("Faces Detected", image)&#10;cv2.waitKey(0)&#10;cv2.destroyAllWindows()'>12</button>
+-->
 
     <script src="script.js"></script>
 </body>
